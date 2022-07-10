@@ -32,7 +32,7 @@ include:
 [molecular fingerprinting]: http://www.dalkescientific.com/writings/diary/archive/2008/06/26/fingerprint_background.html
 [chess programming]: https://www.chessprogramming.org/Population_Count
 [bitboards]: https://www.chessprogramming.org/Bitboards
-[calculating mobility]: https://www.chessprogramming.org/Mobility#Mobility_with_Bitboards
+[calculating piece mobility]: https://www.chessprogramming.org/Mobility#Mobility_with_Bitboards
 [calculating adjacency matrices]: https://news.ycombinator.com/item?id=20915187
 
 Popcount is so pervasive in programs that both [GCC][] and [Clang][] will try
