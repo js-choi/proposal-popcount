@@ -76,7 +76,7 @@ and, if not, whether we should split it up by size (e.g., `Math.popcnt(i)`
 versus `Math.popcnt32(i)` and `Math.popcnt64(i)`). A related cross-cutting
 concern is how its API would fit with the [BigInt Math proposal][].
 
-[BigInt Math]: https://github.com/tc39/proposal-bigint-math
+[BigInt Math proposal]: https://github.com/tc39/proposal-bigint-math
 
 (Lastly, an alternative to adding a popcount function that acts on integers
 would be to add a bit-array data type with a popcount method. This would be
