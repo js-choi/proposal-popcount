@@ -57,16 +57,27 @@ cases as possible and shape our design to fulfill them.
 We would probably add a static function to the Math constructor that would look
 like one the following:
 
-```js
-Math.popCount(i)
-Math.popcount(i) // Like in C++.
-Math.popcnt(i) // Like in WebAssembly (WAT).
-Math.bitCount(i) // Like in Python, Java, MySQL.
-Math.nonzeroBitCount(i) // Like in Swift.
-Math.onesCount(i) // Like in Go.
-Math.countOnes(i) // Like in Rust.
-Math.countZeroes(i) // Like in Rust.
-```
+| Precedent                 | Form                                         | Negative-int behavior                           |
+| ------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| **[Python][]**            | `i.bit_count()`                              | Absolute value                                  |
+| **[Java][]**              | `Integer.bitCount(i)`, `Long.bitCount(i)`, … | Two’s complement (type dependent)               |
+| **[Go][]**                | `bits.OnesCount(i)`, `bits.OnesCount8(i)`, … | Unsigned types only (compiler enforced)         |
+| **[Swift][]**             | `i.nonzeroBitCount`*                         | Two’s complement (32- or 64-bit based on build) |
+| **[Rust][]**              | `i.count_ones()`                             | Two’s complement (type dependent)               |
+| **[C++][]**               | `std::popcnt(i)`                             | Unsigned types only (compiler enforced)         |
+| **[WebAssembly (WAT)][]** | `i32.popcnt`, `i64.popcnt`                   | Two’s complement (type dependent)               |
+| **[MySQL][]**             | `BIT_COUNT(i)`                               | Two’s complement (64 bit)                       |
+
+\* Swift’s `nonzeroBitCount` property forms a trio with its `leadingZeroBitCount` and `trailingZeroBitCount` properties.
+
+[Python]: https://docs.python.org/3/library/stdtypes.html#int.bit_count
+[Java]: https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Integer.html#bitCount(int)
+[Go]: https://pkg.go.dev/math/bits#OnesCount
+[Swift]: https://developer.apple.com/documentation/swift/int/nonzerobitcount
+[Rust]: https://doc.rust-lang.org/std/?search=count_ones
+[C++]: https://en.cppreference.com/w/cpp/numeric/popcount
+[WebAssembly (WAT)]: https://developer.mozilla.org/en-US/docs/webassembly/reference/numeric/population_count
+[MySQL]: https://dev.mysql.com/doc/refman/5.7/en/bit-functions.html#function_bit-count
 
 We could restrict the function to safe integers; it is uncertain how it should
 behave on non-safe integers, negative integers, or non-integer numbers.
@@ -79,5 +90,5 @@ concern is how its API would fit with the [BigInt Math proposal][].
 [BigInt Math proposal]: https://github.com/tc39/proposal-bigint-math
 
 (Lastly, an alternative to adding a popcount function that acts on integers
-would be to add a bit-array data type with a popcount method. This would be
-considerably more complicated.)
+would be to add a bit-array data type with a popcount method. This would
+probably be considerably more complicated.)
