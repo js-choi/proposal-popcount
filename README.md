@@ -70,7 +70,7 @@ like one the following:
 | **[Haskell][]**          | `popCount i`                                 | 8/16/≥29/32/64-bit; bignum | Signed   | Two’s complement (type dependent) |
 | **[Rust][]**             | `i.count_ones()`                             | 8/16/32/64/128-bit         | Signed   | Two’s complement (type dependent) |
 | **[WebAssembly text][]** | `i32.popcnt`, `i64.popcnt`                   | 32/64-bit                  | Signed   | Two’s complement (type dependent) |
-| **[Swift][]**            | `i.nonzeroBitCount`§                         | 32-/64-bit¶                | Signed   | Two’s complement¶                 |
+| **[Swift][]**            | `i.nonzeroBitCount`§                         | 32/64-bit¶                 | Signed   | Two’s complement¶                 |
 | **[Common Lisp][]**      | `(logcount i)`                               | 8-bit                      | Signed   | Two’s complement (8-bit)          |
 | **[Scheme (R6RS)][]**    | `(bitwise-bit-count i)`                      | ≥24-bit                    | Signed   | Two’s complement (≥24-bit)        |
 | **[MySQL][]**            | `BIT_COUNT(i)`                               | 64-bit                     | Signed   | Two’s complement (64-bit)         |
