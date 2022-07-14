@@ -57,27 +57,62 @@ cases as possible and shape our design to fulfill them.
 We would probably add a static function to the Math constructor that would look
 like one the following:
 
-| Precedent                 | Form                                         | Negative-int behavior                           |
-| ------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| **[Python][]**            | `i.bit_count()`                              | Absolute value                                  |
-| **[Java][]**              | `Integer.bitCount(i)`, `Long.bitCount(i)`, … | Two’s complement (type dependent)               |
-| **[Go][]**                | `bits.OnesCount(i)`, `bits.OnesCount8(i)`, … | Unsigned types only (compiler enforced)         |
-| **[Swift][]**             | `i.nonzeroBitCount`*                         | Two’s complement (32- or 64-bit based on build) |
-| **[Rust][]**              | `i.count_ones()`                             | Two’s complement (type dependent)               |
-| **[C++][]**               | `std::popcnt(i)`                             | Unsigned types only (compiler enforced)         |
-| **[WebAssembly (WAT)][]** | `i32.popcnt`, `i64.popcnt`                   | Two’s complement (type dependent)               |
-| **[MySQL][]**             | `BIT_COUNT(i)`                               | Two’s complement (64 bit)                       |
 
-\* Swift’s `nonzeroBitCount` property forms a trio with its `leadingZeroBitCount` and `trailingZeroBitCount` properties.
+| Precedent                | Form                                         | Size                       | Signed?  | Negative-int behavior             |
+| ------------------------ | -------------------------------------------- | -------------------------- | -------- | --------------------------------- |
+| **[Python][]**           | `i.bit_count()`                              | Bignum                     | Signed   | Input treated as absolute value   |
+| **[Wolfram][]**          | `DigitCount[i, 2, 1]`                        | Bignum                     | Signed   | Input treated as absolute value   |
+| **[GMP][]**              | `mp_bitcnt_t(i)`                             | Bignum                     | Signed   | Special behavior\*                |
+| **[Scheme (R7RS)][]**†   | `(bit-count i)`                              | Bignum‡                    | Signed   | Two’s complement‡                 |
+| **[C++][]**              | `std::popcnt(i)`                             | 8/16/32/64-bit             | Unsigned | Forbidden by static typing        |
+| **[Go][]**               | `bits.OnesCount(i)`, `bits.OnesCount8(i)`, … | 8/16/32/64-bit             | Unsigned | Forbidden by static typing        |
+| **[Java][]**             | `Integer.bitCount(i)`, `Long.bitCount(i)`, … | 16/32-bit; bignum          | Signed   | Two’s complement (type dependent) |
+| **[Haskell][]**          | `popCount i`                                 | 8/16/≥29/32/64-bit; bignum | Signed   | Two’s complement (type dependent) |
+| **[Rust][]**             | `i.count_ones()`                             | 8/16/32/64/128-bit         | Signed   | Two’s complement (type dependent) |
+| **[WebAssembly text][]** | `i32.popcnt`, `i64.popcnt`                   | 32/64-bit                  | Signed   | Two’s complement (type dependent) |
+| **[Swift][]**            | `i.nonzeroBitCount`§                         | 32-/64-bit¶                | Signed   | Two’s complement¶                 |
+| **[Common Lisp][]**      | `(logcount i)`                               | 8-bit                      | Signed   | Two’s complement (8-bit)          |
+| **[Scheme (R6RS)][]**    | `(bitwise-bit-count i)`                      | ≥24-bit                    | Signed   | Two’s complement (≥24-bit)        |
+| **[MySQL][]**            | `BIT_COUNT(i)`                               | 64-bit                     | Signed   | Two’s complement (64-bit)         |
 
-[Python]: https://docs.python.org/3/library/stdtypes.html#int.bit_count
-[Java]: https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Integer.html#bitCount(int)
-[Go]: https://pkg.go.dev/math/bits#OnesCount
-[Swift]: https://developer.apple.com/documentation/swift/int/nonzerobitcount
-[Rust]: https://doc.rust-lang.org/std/?search=count_ones
+<details>
+
+<summary>Table footnotes</summary>
+
+\* [GMP][]’s documentation about `mp_bitcnt_t` says, “If [the argument is
+negative], the number of 1s is infinite, and the return value is the largest
+possible `mp_bitcnt_t`.”
+
+† [Scheme (R7RS)][] here refers to SRFI 151, which is implemented in several
+R7RS implementations, such as [in Chicken Scheme][].
+
+‡ Scheme (R7RS) uses arbitrary-precision integers that SRFI 151 considers as
+little-endian bit strings using two’s complement. This means that negative
+integers are considered to contain infinite ones. Therefore, when `bit-count`
+receives a negative integer, it returns its number of zeroes instead.
+
+§ [Swift][]’s `nonzeroBitCount` property forms a trio with its
+`leadingZeroBitCount` and `trailingZeroBitCount` properties.
+
+¶ Whether Swift’s int type is either 32- or 64-bit depends on its compiler.
+
+</details>
+
 [C++]: https://en.cppreference.com/w/cpp/numeric/popcount
-[WebAssembly (WAT)]: https://developer.mozilla.org/en-US/docs/webassembly/reference/numeric/population_count
+[Common Lisp]: http://www.lispworks.com/documentation/HyperSpec/Body/f_logcou.htm
+[GMP]: https://gmplib.org/manual/Integer-Logic-and-Bit-Fiddling#index-mpz_005fpopcount
+[Go]: https://pkg.go.dev/math/bits#OnesCount
+[Haskell]: https://downloads.haskell.org/~ghc/9.2.3/docs/html/libraries/base-4.16.2.0/Data-Bits.html#v:popCount
+[in Chicken Scheme]: https://wiki.call-cc.org/supported-standards
+[Java]: https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/lang/Integer.html#bitCount(int)
 [MySQL]: https://dev.mysql.com/doc/refman/5.7/en/bit-functions.html#function_bit-count
+[Python]: https://docs.python.org/3/library/stdtypes.html#int.bit_count
+[Rust]: https://doc.rust-lang.org/std/?search=count_ones
+[Scheme (R6RS)]: http://www.r6rs.org/final/html/r6rs-lib/r6rs-lib-Z-H-12.html
+[Scheme (R7RS)]: https://srfi.schemers.org/srfi-151/srfi-151.html
+[Swift]: https://developer.apple.com/documentation/swift/int/nonzerobitcount
+[WebAssembly text]: https://developer.mozilla.org/en-US/docs/webassembly/reference/numeric/population_count
+[Wolfram]: https://reference.wolfram.com/language/ref/DigitCount.html
 
 We could restrict the function to safe integers; it is uncertain how it should
 behave on non-safe integers, negative integers, or non-integer numbers.
