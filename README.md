@@ -1,4 +1,4 @@
-# Binary population count in JavaScript
+# Bit population count in JavaScript
 ECMAScript Proposal. J. S. Choi, 2021. Stage 0.
 
 ## Rationale
