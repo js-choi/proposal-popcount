@@ -3,7 +3,7 @@ ECMAScript Proposal. J. S. Choi, 2021. Stage 0.
 
 ## Rationale
 
-Binary population count (aka “popcount” or “popcnt”) is a numeric operation that
+Bitwise population count (aka “popcount” or “popcnt”) is a numeric operation that
 counts the number of 1-bits in an integer’s binary representation. This is a
 useful and versatile operation in numerics, scientific applications, binary parsing, and many other context—such that it is included as a
 built-in instruction in many today CPUs; it’s also an instruction in
