@@ -87,11 +87,11 @@ negative integer, it returns its number of zeroes instead. For example, both
 `(bit-count 255)` and `(bit-count -256)` are 8, and both `(logcount 256)` and
 `(logcount -257)` are 1.
 
-‡ R6RS’s `bitwise-bit-count` additionally applies bitwise NOT (i.e., one’s
+R6RS’s `bitwise-bit-count` additionally applies bitwise NOT (i.e., one’s
 complement – i.e., two’s complement minus one) to the number of zeroes. For
 example, `(bitwise-bit-count -256)` is -9, and `(bitwise-bit-count -257)` is -2.
 
-\* [GMP][]’s documentation about `mp_bitcnt_t` says, “If [the argument is
+‡ [GMP][]’s documentation about `mp_bitcnt_t` says, “If [the argument is
 negative], the number of 1s is infinite, and the return value is the largest
 possible `mp_bitcnt_t`.”
 
