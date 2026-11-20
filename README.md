@@ -132,7 +132,7 @@ and inefficient to write with the existing ECMAScript language facilities (e.g.,
 
 ## API Possibilities
 
-`Math.popcount` and `Math.ctz32` with uint32 coercion are obvious close cousins
+`Math.popcount32` and `Math.ctz32` with uint32 coercion are obvious close cousins
 of `Math.clz32`.
 
 Beyond that, we can explore the variations for larger bit widths, most notably
