@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<pre class="metadata">
+title: Bitwise counting
+stage: 0
+contributors: J. S. Choi, Richard Gibson
+</pre>
+
+<emu-clause id="sec-math.ctz32">
+  <h1>Math.ctz32 ( _x_ )</h1>
+  <p>This function performs the following steps when called:</p>
+  <emu-alg>
+    1. Let _n_ be ? ToUint32(_x_).
+    1. Let _p_ be the number of trailing zero bits in the unsigned 32-bit binary representation of _n_.
+    1. Return 𝔽(_p_).
+  </emu-alg>
+  <emu-note>
+    <p>If _n_ is either *+0*<sub>𝔽</sub> or *-0*<sub>𝔽</sub>, this method returns *32*<sub>𝔽</sub>. If the least significant bit of the 32-bit binary encoding of _n_ is 1, this method returns *+0*<sub>𝔽</sub>.</p>
+  </emu-note>
+</emu-clause>
+
+<emu-clause id="sec-math.popcount32">
+  <h1>Math.popcount32 ( _x_ )</h1>
+  <p>This function performs the following steps when called:</p>
+  <emu-alg>
+    1. Let _n_ be ? ToUint32(_x_).
+    1. Let _p_ be the number of one bits in the unsigned 32-bit binary representation of _n_.
+    1. Return 𝔽(_p_).
+  </emu-alg>
+</emu-clause>
