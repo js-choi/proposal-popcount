@@ -1,14 +1,25 @@
-# Bitwise population count in JavaScript
-ECMAScript Proposal. J. S. Choi, 2021. Stage 0.
+# Bitwise counting
+
+A proposal for ECMAScript bitwise counting operations beyond [`Math.clz32`](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-math.clz32) (uint32 count leading zeros).
+
+## Status
+
+[The TC39 Process](https://tc39.es/process-document/)
+
+**Stage**: 0  \
+**Champions:** Richard Gibson ([@gibson042](https://github.com/gibson042))  \
+**Authors:** J. S. Choi ([@js-choi](https://github.com/js-choi))
 
 ## Rationale
 
-Bitwise population count (aka “popcount”, “popcnt”, and “bit count”) is a numeric operation that
-counts the number of 1-bits in an integer’s binary representation. This is a
-useful and versatile operation in numerics, scientific applications, binary parsing, and many other context—such that it is included as a
-built-in instruction in many today CPUs; it’s also an instruction in
-WebAssembly. It is also present in many programming languages’ standard
-libraries.
+### Popcount
+
+Bitwise population count (aka “popcount”, “popcnt”, and “bit count”) counts the
+number of 1-bits in an integer’s binary representation.
+This is a useful and versatile operation in numerics, scientific applications,
+binary parsing, and many other contexts—such that it is included as a
+built-in instruction in many CPUs and in WebAssembly. It is also present in many
+programming languages’ standard libraries.
 
 Some known use cases are detailed in an [article by Vaibhav Sagar][]. These
 include:
@@ -47,16 +58,9 @@ LLVM/Clang has adopted the former for this reason.)
 [SIMD]: https://arxiv.org/pdf/1611.07612.pdf
 
 Popcount is annoying and inefficient to write in JavaScript. We therefore
-propose exploring the addition of a popcount API to the JavaScript language.
+propose adding some form of it to the JavaScript language.
 
-If this proposal is approved for Stage 1, then we would explore various
-directions for the API’s design. We would also assemble as many real-world use
-cases as possible and shape our design to fulfill them.
-
-## Description
-We would probably add a static function to the Math constructor that would look
-like one the following:
-
+#### Popcount in the broader ecosystem
 
 | Precedent             | Form                                        | Size                      | Signed?  | Negative-int behavior                     |
 | ----------------------| ------------------------------------------- | --------------------------| -------- | ----------------------------------------- |
@@ -118,16 +122,20 @@ possible `mp_bitcnt_t`.”
 [WebAssembly]: https://developer.mozilla.org/en-US/docs/webassembly/reference/numeric/population_count
 [Wolfram]: https://reference.wolfram.com/language/ref/DigitCount.html
 
-We could restrict the function to safe integers; it is uncertain how it should
-behave on non-safe integers, negative integers, or non-integer numbers.
+### Count trailing zeros
 
-It is also uncertain whether we should limit it to 32- and/or 64-bit integers
-and, if not, whether we should split it up by size (e.g., `Math.popcnt(i)`
-versus `Math.popcnt32(i)` and `Math.popcnt64(i)`). A related cross-cutting
-concern is how its API would fit with the [BigInt Math proposal][].
+Counting the trailing 0-bits in an integer’s binary representation is similarly
+valuable for common optimizations when working with bitmaps, similarly common
+across CPU instructions and other programming languages, and similarly annoying
+and inefficient to write with the existing ECMAScript language facilities (e.g.,
+`const clz32 = x => { x = x|0 || 0; return x ? 32 - Math.clz32(x & -x) - 1 : 32; }`).
+
+## API Possibilities
+
+`Math.popcount` and `Math.ctz32` with uint32 coercion are obvious close cousins
+of `Math.clz32`.
+
+Beyond that, we can explore the variations for larger bit widths, most notably
+64-bit integers (perhaps in the context of the [BigInt Math proposal][]).
 
 [BigInt Math proposal]: https://github.com/tc39/proposal-bigint-math
-
-(Lastly, an alternative to adding a popcount function that acts on integers
-would be to add a bit-array data type with a popcount method. This would
-probably be considerably more complicated.)
